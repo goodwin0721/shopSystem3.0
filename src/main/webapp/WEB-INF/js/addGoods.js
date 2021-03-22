@@ -83,7 +83,7 @@ $(document).ready(
 					alert("请填入详细商品信息");
 				} else {
 					// var url = "/" + window.location.pathname.split("/")[1] + "/addGoods"/" + new Date().getTime();
-					var url = "/" + window.location.pathname.split("/")[1] + "/addGoods";
+					var url = "/" + window.location.pathname.split("/")[1] + "/admin/m/addGoods";
 					var data = {
 						name : name,
 						describe : describe,

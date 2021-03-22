@@ -13,6 +13,7 @@ import pers.goodwin.shopSystem.service.GoodsService;
 import java.io.IOException;
 
 @Controller
+@RequestMapping("/admin/m")
 public class ManagerController {
 
     @Autowired

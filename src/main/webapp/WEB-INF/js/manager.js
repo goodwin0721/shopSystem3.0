@@ -4,7 +4,7 @@ function replenish(goodsId){
 	stock = parseInt(document.getElementById("stock"+goodsId).value);
 	if(count > 0){
 		//var url = "/"+window.location.pathname.split("/")[1] + "/replenish?goodsId=" + goodsId + "&count=" + count;
-		var url = "/"+window.location.pathname.split("/")[1] + "/replenish";
+		var url = "/"+window.location.pathname.split("/")[1] + "/admin/m/replenish";
 		stock = count + stock;
 		var data = {
 			goodsId:goodsId,
@@ -31,7 +31,7 @@ function replenish(goodsId){
 
 function unShelve(goodsId){
 	//var url = "/"+window.location.pathname.split("/")[1] + "/unShelve?goodsId=" + goodsId + "&stock=" + stock;
-	var url = "/"+window.location.pathname.split("/")[1] + "/unShelve";
+	var url = "/"+window.location.pathname.split("/")[1] + "/admin/m/unShelve";
 	let stock = parseInt(document.getElementById("stock"+goodsId).value);
 	var data = {
 		goodsId:goodsId,
