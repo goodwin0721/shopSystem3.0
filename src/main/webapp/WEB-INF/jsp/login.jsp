@@ -14,7 +14,6 @@
 </head>
 
 <body>
-
 	<div id="loginContent">
 		<div>
 			<form action="${pageContext.request.contextPath }/m/login" method="post">

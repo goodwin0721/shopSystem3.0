@@ -8,6 +8,8 @@
 <meta name="author" content="goodwin">
 <title>注册</title>
 <link rel='stylesheet' type = 'text/css' href ='${pageContext.request.contextPath}/css/style.css'/>
+<script src="${pageContext.request.contextPath}/js/jquery-3.5.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/register.js"></script>
 <base href = '${pageContext.request.contextPath}/p/index'>
 </head>
 
@@ -17,7 +19,8 @@
 		<div>
 			<form action="${pageContext.request.contextPath }/m/register" method="post">
 				<span class="registerP">用户名：</span>
-				<input class="registerText" type="text" name="username" required="required"/><br>
+				<input id="usernameTx" class="registerText" type="text" name="username" required="required"/>
+				<span id="isE" style="width: 5%;"></span><br>
 				<span class="registerP">密码：</span>
 				<input class="registerText" type="password" name="password" required="required"/><br>
 				<span class="registerP">出生日期：</span>
