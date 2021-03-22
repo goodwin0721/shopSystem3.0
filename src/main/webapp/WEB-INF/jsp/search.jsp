@@ -65,7 +65,7 @@
 				<input id="maxPage" type="hidden" value="${requestScope.pageMsg.totalPage}">
 				<button onclick="skip('${requestScope.type}','${requestScope.classify}',1)">首页</button>
 				<button onclick="skip('${requestScope.type}','${requestScope.classify}',${requestScope.pageMsg.currPage-1})">上一页</button>
-				<input id="pageNumb" type="number" maxlength="10px" placeholder="1~${requestScope.pageMsg.totalPage}" oninput="if(value > ${requestScope.pageMsg.totalPage} || value < 1 ){value = ${requestScope.pageMsg.totalPage}}"/>
+				<input id="pageNumb" type="number" maxlength="30px" placeholder="${requestScope.pageMsg.currPage}/${requestScope.pageMsg.totalPage}" oninput="if(value > ${requestScope.pageMsg.totalPage} || value < 1 ){value = ${requestScope.pageMsg.totalPage}}"/>
 				<button onclick="next('${requestScope.type}','${requestScope.classify}')">跳转</button>
 				<button onclick="skip('${requestScope.type}','${requestScope.classify}',${requestScope.pageMsg.currPage+1})">下一页</button>
 				<button onclick="skip('${requestScope.type}','${requestScope.classify}',${requestScope.pageMsg.totalPage})">尾页</button>
