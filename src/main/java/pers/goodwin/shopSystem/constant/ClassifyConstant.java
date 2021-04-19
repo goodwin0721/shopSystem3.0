@@ -3,6 +3,10 @@ package pers.goodwin.shopSystem.constant;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 商品分类常量
+ * @author goodwin
+ */
 public final class ClassifyConstant {
 	public static Map<String ,String> CLASSIFYMAP = new HashMap<String, String>();
 	static {
