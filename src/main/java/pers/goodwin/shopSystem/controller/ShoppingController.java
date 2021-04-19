@@ -19,6 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * @author goodwin
+ */
 @Controller
 public class ShoppingController {
 
@@ -26,6 +29,14 @@ public class ShoppingController {
     @Qualifier("shoppingService")
     private ShoppingService shoppingService;
 
+    /**
+     * 用户将商品添加到购物车，通过Ajax异步更新
+     * @param goodsId
+     * @param amount
+     * @param request
+     * @return
+     * @throws JsonProcessingException
+     */
     @RequestMapping(value = "/addToCart",produces = "application/json;charset=utf-8")
     @ResponseBody
     public String addGoodsToCart(@RequestParam("goodsId") int goodsId, @RequestParam("amount") int amount, HttpServletRequest request) throws JsonProcessingException {
@@ -35,17 +46,26 @@ public class ShoppingController {
         boolean flag = false;
         User user = (User)request.getSession().getAttribute("user");
         String msg = "";
-        if(user == null)
+        if(user == null) {
             msg = "请先登录";
+        }
         flag = shoppingService.addGoodsToCart(user.getId(),goodsId,amount);
-        if(flag)
+        if(flag) {
             msg = "操作成功";
-        else
+        } else {
             msg = "操作失败";
+        }
         //System.out.println(mapper.writeValueAsString(msg));
         return mapper.writeValueAsString(msg);
     }
 
+    /**
+     * 用户修改购物车商品预购数量，通过Ajax异步更新
+     * @param data
+     * @param request
+     * @return
+     * @throws IOException
+     */
     @RequestMapping("/changeCartGoodsAmount")
     @ResponseBody
     public String changeCartGoodsAmount(@RequestBody String data,HttpServletRequest request) throws IOException {
@@ -55,14 +75,15 @@ public class ShoppingController {
         boolean isSuccess = false;
         String message;
         User user = (User)request.getSession().getAttribute("user");
-        if(user == null)
+        if(user == null) {
             return "false";
+        }
         CartDto cartDto =  mapper.readValue(data, CartDto.class);
         cartDto.setUserId(user.getId());
         //System.out.println(data);{"goodsId":4002,"amount":"8"}
-        if(cartDto.getAmount() == 0)
+        if(cartDto.getAmount() == 0) {
             isSuccess = shoppingService.removeGoodsFromCart(cartDto.getUserId(), cartDto.getGoodsId());
-        else {
+        } else {
             isSuccess = shoppingService.updateGoodsAmountInCart(cartDto.getUserId(), cartDto.getGoodsId(), cartDto.getAmount());
         }
         List<CartVo> cartList = shoppingService.showUserCart(cartDto.getUserId());
@@ -72,26 +93,26 @@ public class ShoppingController {
             }
             total += cart.getAubtotal();
         }
-        if(isSuccess)
+        if(isSuccess) {
             message = "true," + aubtotal + "," + total;
-        else
+        } else {
             message = "false";
+        }
         return message;
     }
 
+    /**
+     * 用户结算商品
+     * @param request
+     * @return
+     */
     @RequestMapping("/pay")
     public String pay(HttpServletRequest request){
         User user = (User) request.getSession().getAttribute("user");
-        if(user != null &&  shoppingService.shopping(user.getId()))
+        if(user != null &&  shoppingService.shopping(user.getId())) {
             return "redirect:/p/indent";
-        else
+        } else {
             return "redirect:/p/cart";
+        }
     }
-
-
-
-
-
-
-
 }

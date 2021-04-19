@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author goodwin
+ */
 @Controller
 public class SearchController {
 
@@ -22,7 +25,12 @@ public class SearchController {
     @Qualifier("goodsService")
     private GoodsService goodsService;
 
-    //按商品分类搜索
+    /**
+     * 按商品分类搜索
+     * @param model
+     * @param classify
+     * @return
+     */
     @GetMapping("/t/{classify}")
     public String search(Model model, @PathVariable String classify){
         List<Goods> goodsList = new ArrayList<Goods>();
@@ -30,18 +38,28 @@ public class SearchController {
         if(classify.equals("all")){
             goodsList = goodsService.getAll();
             keyword = "全部商品";
-        } else
+        } else {
             goodsList = goodsService.searchByClassify(classify);
+        }
         model.addAttribute("goodslist", goodsList);
-        if(!classify.equals("all"))
+        if(!classify.equals("all")) {
             keyword = ClassifyConstant.CLASSIFYMAP.containsKey(classify)?ClassifyConstant.CLASSIFYMAP.get(classify):classify;
+        }
         model.addAttribute("keyword", keyword);
-        if(goodsList == null)
+        if(goodsList == null) {
             model.addAttribute("isSuccess",false);
+        }
         return "search2";
     }
 
-    //关键字搜索，time用来标记成功搜索的时间戳，避免刷新重复提交请求
+    /**
+     * 关键字搜索，time用来标记成功搜索的时间戳，避免刷新重复提交请求
+     * @param keyword
+     * @param time
+     * @param model
+     * @param request
+     * @return
+     */
     @GetMapping("/search/{keyword}/{time}")
     public String searchByKeyword(@PathVariable String keyword, @PathVariable String time, Model model, HttpServletRequest request){
         String t = (String)request.getSession().getAttribute("time");
@@ -50,14 +68,15 @@ public class SearchController {
          1.没有输入搜索内容
          2.重复刷新搜索页面
          */
-        if (keyword == null || keyword.trim().equals("") || (t != null && time.equals(t))) {
+        if (keyword == null || "".equals(keyword.trim()) || (t != null && time.equals(t))) {
             //System.out.println("无效操作==>重复刷新页面");
             //如果搜索框为无效信息或者重复提交、刷新时，啥也不干
         } else {
-            //更新session中的time
-            request.getSession().setAttribute("time", time);//记录请求的time属性到session里，免得重复提交
+            //更新session中的time，记录请求的time属性到session里，免得重复提交
+            request.getSession().setAttribute("time", time);
             List<Goods> goodslist = goodsService.searchByKeyword(keyword);
-            model.addAttribute("keyword", keyword);//用来更新“你的位置”
+            //用来更新“你的位置”
+            model.addAttribute("keyword", keyword);
             if(goodslist != null && goodslist.size() != 0 ) {
                 //查到商品信息
                 //System.out.println("按关键字搜索====》搜到了");
@@ -70,6 +89,13 @@ public class SearchController {
         return "search2";
     }
 
+    /**
+     * 按分类，分页查询商品
+     * @param classify
+     * @param pageNumb
+     * @param model
+     * @return
+     */
     @GetMapping("/type/{classify}/{pageNumb}")
     public String searchByClassify(@PathVariable("classify") String classify,@PathVariable("pageNumb") int pageNumb,Model model){
         PageBean<Goods> pageMsg = new PageBean<>();
@@ -77,27 +103,38 @@ public class SearchController {
         if(classify.equals("all")){
             pageMsg = goodsService.pagedQuery(pageNumb);
             keyword = "全部商品";
-        } else
+        } else {
             pageMsg = goodsService.pagedQueryByClassify(classify, pageNumb);
-        if(!classify.equals("all"))
+        }
+        if(!classify.equals("all")) {
             keyword = ClassifyConstant.CLASSIFYMAP.containsKey(classify)?ClassifyConstant.CLASSIFYMAP.get(classify):classify;
+        }
         model.addAttribute("keyword", keyword);
         model.addAttribute("pageMsg", pageMsg);
-        if(pageMsg.getLists().size() == 0)
+        if(pageMsg.getLists().size() == 0) {
             model.addAttribute("isSuccess",false);
+        }
         model.addAttribute("type","type");
         model.addAttribute("classify",classify);
         return "search";
     }
 
+    /**
+     * 按关键字，分页查询商品
+     * @param keyword
+     * @param pageNumb
+     * @param model
+     * @return
+     */
     @GetMapping("/keyword/{keyword}/{pageNumb}")
     public String searchByKeyword(@PathVariable("keyword") String keyword,@PathVariable("pageNumb") int pageNumb,Model model){
         PageBean<Goods> pageMsg = new PageBean<>();
         pageMsg = goodsService.pagedQueryByKeyword(keyword,pageNumb);
         model.addAttribute("keyword", keyword);
         model.addAttribute("pageMsg", pageMsg);
-        if(pageMsg.getLists().size() == 0)
+        if(pageMsg.getLists().size() == 0) {
             model.addAttribute("isSuccess",false);
+        }
         model.addAttribute("type","keyword");
         return "search";
     }

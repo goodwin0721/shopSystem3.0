@@ -12,6 +12,9 @@ import pers.goodwin.shopSystem.service.GoodsService;
 
 import java.io.IOException;
 
+/**
+ * @author goodwin
+ */
 @Controller
 @RequestMapping("/admin/m")
 public class ManagerController {
@@ -20,24 +23,33 @@ public class ManagerController {
     @Qualifier("goodsService")
     private GoodsService goodsService;
 
-    //上架商品
+    /**
+     * 上架商品
+     * @param data
+     * @return
+     * @throws IOException
+     */
     @RequestMapping("/addGoods")
     @ResponseBody
     public String addGoods(@RequestBody String data) throws IOException {
-        //System.out.println(data);
         String message;
         boolean isSuccess = false;
         ObjectMapper mapper = new ObjectMapper();
         GoodsDto goodsDto = mapper.readValue(data, GoodsDto.class);
         isSuccess = goodsService.addGoods(goodsDto);
-        if(isSuccess)
+        if(isSuccess) {
             message = "<font color='green'>操作成功</font>";
-        else
+        } else {
             message = "<font color='red'>操作失败</font>";
+        }
         return message;
     }
 
-    //补充库存
+    /**
+     * 补充库存
+     * @param data
+     * @return
+     */
     @RequestMapping("/replenish")
     @ResponseBody
     public String replenish(@RequestBody String data) {
@@ -46,22 +58,28 @@ public class ManagerController {
         String goodsId = msg[0].substring( msg[0].indexOf(":")+1);
         String count = msg[1].substring(msg[1].indexOf(":")+1,msg[1].indexOf("}"));
         //System.out.println("goodsId = " + goodsId + " , count = " + count);
-        if(goodsService.addStockById(goodsId,count))
+        if(goodsService.addStockById(goodsId,count)) {
             return "成功上架该商品数量：" + count;
-        else
+        } else {
             return "上架失败";
+        }
     }
 
-    //下架商品
+    /**
+     * 下架商品
+     * @param data
+     * @return
+     */
     @RequestMapping("/unShelve")
     @ResponseBody
     public String unshelve(@RequestBody String data){
         String[] msg = data.split(",");
         String goodsId = msg[0].substring( msg[0].indexOf(":")+1);
         String stock = msg[1].substring(msg[1].indexOf(":")+1,msg[1].indexOf("}"));
-        if(goodsService.subStockById(goodsId,stock))
+        if(goodsService.subStockById(goodsId,stock)) {
             return "成功下架该商品数量：" + stock;
-        else
+        } else {
             return "操作失败";
+        }
     }
 }
