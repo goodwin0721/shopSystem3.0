@@ -38,10 +38,11 @@ public class ShoppingServiceImpl implements ShoppingService {
 	@Override
 	public boolean addGoodsToCart(int userId, int goodsId, int amount) {
 		Cart cart = cartMapper.getCart(userId, goodsId);
-		if(cart == null)
+		if(cart == null) {
 			cartMapper.addGoodsToCart(userId, goodsId, amount);
-		else
+		} else {
 			cartMapper.updateGoodsAmount(userId, goodsId, cart.getAmount() + amount);
+		}
 		return true;
 	}
 
@@ -54,8 +55,9 @@ public class ShoppingServiceImpl implements ShoppingService {
 	@Override
 	public List<CartVo> showUserCart(int userId) {
 		List<Cart> cartList = cartMapper.searchByUserId(userId);
-		if(cartList == null)
+		if(cartList == null) {
 			return null;
+		}
 		List<CartVo> cartVo = new ArrayList<CartVo>(cartList.size());
 		for(Cart cart:cartList) {
 			CartVo vo = new CartVo();

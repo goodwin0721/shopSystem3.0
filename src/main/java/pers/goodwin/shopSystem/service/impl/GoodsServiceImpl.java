@@ -14,6 +14,9 @@ import pers.goodwin.shopSystem.pojo.PageBean;
 import pers.goodwin.shopSystem.service.GoodsService;
 import pers.goodwin.shopSystem.utils.PictureUtil;
 
+/**
+ * @author goodwin
+ */
 public class GoodsServiceImpl implements GoodsService {
 	private GoodsMapper goodsMapper;
 	private ClassifyMapper classifyMapper;
@@ -42,9 +45,7 @@ public class GoodsServiceImpl implements GoodsService {
 	public boolean addGoods(String name, String describe, int price, int stock, String classify,
 			String base64Img) {
 		// 把图片存入，返回图片地址,将图片base64转格式存起来，获得文件地址
-		//System.out.println("========开始存图片==============");
 		String pictureUrl =  pictureUtil.savePictureByBase64(base64Img);
-		// System.out.println("========图片存好了==============");
 		Goods goods = new Goods();
 		//生成goodsId
 		goods.setId(setGoodsId(classify));
@@ -62,14 +63,16 @@ public class GoodsServiceImpl implements GoodsService {
 
 	private int setGoodsId(String classify) {
 		GoodsClassify gClassify = classifyMapper.getClassify(classify);
-		if(gClassify == null)
+		if(gClassify == null) {
 			return (int) (Math.random()*(-10000));
+		}
 		int head = gClassify.getId();
 		int tail = gClassify.getSum() + 1;
 		int length = Integer.toString(tail).length();
 		//该分类商品数量少于100
-		if(length <= 2 )	
+		if(length <= 2 ) {
 			return head * 100 + tail;
+		}
 		return (int) (head * Math.pow(10, length) + tail);
 	}
 
@@ -95,16 +98,18 @@ public class GoodsServiceImpl implements GoodsService {
 		if(ClassifyConstant.CLASSIFYMAP.containsKey(classify)) {
 			Integer classifyId = classifyMapper.getClassifyId(ClassifyConstant.CLASSIFYMAP.get(classify));
 			return goodsMapper.getGoodsByClassifyId(classifyId);
-		}else if(classify.equals("all")) {
+		}else if("all".equals(classify)) {
 			return goodsMapper.getAllGoods();
-		}else
+		}else {
 			return null;
+		}
 	}
 
 	@Override
 	public List<Goods> searchByKeyword(String keyword) {
-		if (keyword == null || keyword.trim().length() == 0)
+		if (keyword == null || keyword.trim().length() == 0) {
 			return null;
+		}
 		return goodsMapper.getGoodsByKeyword(keyword);
 	}
 
@@ -113,63 +118,10 @@ public class GoodsServiceImpl implements GoodsService {
 		return goodsMapper.getAllGoods();
 	}
 
-	/*@Override
-	public List<Goods> getAllByPage(int currentPage) {
-		HashMap<String,Object> map = new HashMap<String,Object>();
-		map.put("start",(currentPage-1)*PageConstant.PAGE_SIZE);
-		map.put("size", PageConstant.PAGE_SIZE);
-		return goodsMapper.getAllGoodsByPage(map);
-	}*/
-
-	/*@Override
-	public List<Goods> searchByClassifyAndPage(String classify, int currentPage) {
-		if(ClassifyConstant.CLASSIFYMAP.containsKey(classify)) {
-			HashMap<String,Object> map = new HashMap<String,Object>();
-			Integer classifyId = classifyMapper.getClassifyId(ClassifyConstant.CLASSIFYMAP.get(classify));
-			map.put("classifyId",classifyId);
-			map.put("start",(currentPage-1)*PageConstant.PAGE_SIZE);
-			map.put("size", PageConstant.PAGE_SIZE);
-			return goodsMapper.getGoodsByClassifyIdAndPage(map);
-		}else
-			return null;
-	}*/
-
-	/*@Override
-	public List<Goods> searchByKeywordAndPage(String keyword, int currentPage) {
-		if (keyword == null || keyword.trim().length() == 0)
-			return null;
-		HashMap<String,Object> map = new HashMap<String,Object>();
-		map.put("keyword",keyword);
-		map.put("start",(currentPage-1)*PageConstant.PAGE_SIZE);
-		map.put("size", PageConstant.PAGE_SIZE);
-		return goodsMapper.getGoodsByKeywordAndPage(map);
-	}*/
-
-	/*@Override
-	public Integer getCount() {
-		return goodsMapper.getCount();
-	}*/
-
-	/*@Override
-	public Integer getCountByClassify(String classify) {
-		if(ClassifyConstant.CLASSIFYMAP.containsKey(classify)) {
-			Integer classifyId = classifyMapper.getClassifyId(ClassifyConstant.CLASSIFYMAP.get(classify));
-			return goodsMapper.getCountByClassifyId(classifyId);
-		}else
-			return 0;
-	}*/
-
-	/*@Override
-	public Integer getCountByKeyword(String keyword) {
-		return goodsMapper.getCountByKeyword(keyword);
-	}*/
-
 	@Override
-	//分页查询-所有商品
 	public PageBean<Goods> pagedQuery(int currentPage) {
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		PageBean<Goods> goodsPageBean = new PageBean<>();
-
 		//当前页面
 		goodsPageBean.setCurrPage(currentPage);
 		//每页显示的数据数目
@@ -179,7 +131,8 @@ public class GoodsServiceImpl implements GoodsService {
 		goodsPageBean.setTotalCount(count);
 		//总页数
 		double dc = count;
-		Double num =Math.ceil(dc/PageConstant.PAGE_SIZE);//向上取整
+		//向上取整
+		Double num =Math.ceil(dc/PageConstant.PAGE_SIZE);
 		goodsPageBean.setTotalPage(num.intValue());
 		//每页商品数据
 		map.put("start",(currentPage-1)*PageConstant.PAGE_SIZE);
@@ -190,25 +143,35 @@ public class GoodsServiceImpl implements GoodsService {
 
 	@Override
 	public PageBean<Goods> pagedQueryByClassify(String classify, int currentPage) {
-		if(!ClassifyConstant.CLASSIFYMAP.containsKey(classify))
+		if(!ClassifyConstant.CLASSIFYMAP.containsKey(classify)) {
 			return null;
+		}
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		PageBean<Goods> goodsPageBean = new PageBean<>();
 		Integer classifyId = classifyMapper.getClassifyId(ClassifyConstant.CLASSIFYMAP.get(classify));
 		int count = goodsMapper.getCountByClassifyId(classifyId);
 		double dc = count;
-
-		goodsPageBean.setCurrPage(currentPage);				//当前页
-		goodsPageBean.setPageSize(PageConstant.PAGE_SIZE);	//页大小
-		goodsPageBean.setTotalCount(count);					//商品总数
-		Double num =Math.ceil(dc/PageConstant.PAGE_SIZE);	//向上取整
-		goodsPageBean.setTotalPage(num.intValue());			//页总数
+		//当前页
+		goodsPageBean.setCurrPage(currentPage);
+		//页大小
+		goodsPageBean.setPageSize(PageConstant.PAGE_SIZE);
+		//商品总数
+		goodsPageBean.setTotalCount(count);
+		//向上取整
+		Double num =Math.ceil(dc/PageConstant.PAGE_SIZE);
+		//页总数
+		goodsPageBean.setTotalPage(num.intValue());
 
 		//设置查询条件
-		map.put("classifyId",classifyId);					//商品分类Id
-		map.put("start",(currentPage-1)*PageConstant.PAGE_SIZE);//第几页
-		map.put("size", PageConstant.PAGE_SIZE);			//每页多少项
-		goodsPageBean.setLists(goodsMapper.getGoodsByClassifyIdAndPage(map));//查询所得商品列表
+		//商品分类Id
+		map.put("classifyId",classifyId);
+		//第几页
+		map.put("start",(currentPage-1)*PageConstant.PAGE_SIZE);
+		//每页多少项
+		map.put("size", PageConstant.PAGE_SIZE);
+
+		//查询所得商品列表
+		goodsPageBean.setLists(goodsMapper.getGoodsByClassifyIdAndPage(map));
 		return goodsPageBean;
 	}
 
@@ -218,18 +181,27 @@ public class GoodsServiceImpl implements GoodsService {
 		PageBean<Goods> goodsPageBean = new PageBean<>();
 		int count = goodsMapper.getCountByKeyword(keyword);
 		double dc = count;
-
-		goodsPageBean.setCurrPage(currentPage);				//当前页
-		goodsPageBean.setPageSize(PageConstant.PAGE_SIZE);	//页大小
-		goodsPageBean.setTotalCount(count);					//商品总数
-		Double num =Math.ceil(dc/PageConstant.PAGE_SIZE);	//向上取整
-		goodsPageBean.setTotalPage(num.intValue());			//页总数
+		//当前页
+		goodsPageBean.setCurrPage(currentPage);
+		//页大小
+		goodsPageBean.setPageSize(PageConstant.PAGE_SIZE);
+		//商品总数
+		goodsPageBean.setTotalCount(count);
+		//向上取整
+		Double num =Math.ceil(dc/PageConstant.PAGE_SIZE);
+		//页总数
+		goodsPageBean.setTotalPage(num.intValue());
 
 		//设置查询条件
-		map.put("keyword",keyword);					//商品分类Id
-		map.put("start",(currentPage-1)*PageConstant.PAGE_SIZE);//第几页
-		map.put("size", PageConstant.PAGE_SIZE);			//每页多少项
-		goodsPageBean.setLists(goodsMapper.getGoodsByKeywordAndPage(map));//查询所得商品列表
+		//关键字
+		map.put("keyword",keyword);
+		//第几页
+		map.put("start",(currentPage-1)*PageConstant.PAGE_SIZE);
+		//每页多少项
+		map.put("size", PageConstant.PAGE_SIZE);
+
+		//查询所得商品列表
+		goodsPageBean.setLists(goodsMapper.getGoodsByKeywordAndPage(map));
 		return goodsPageBean;
 	}
 
