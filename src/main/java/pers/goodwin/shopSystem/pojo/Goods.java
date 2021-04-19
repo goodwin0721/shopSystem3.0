@@ -12,12 +12,27 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Goods {
 	private int id;
-	private String name;// 商品名称
-	private String described;// 描述
-	private int price;// 价格
-	private int stock;// 库存
-	private String pictureUrl;// 图片地址
-	private int sold;// 已售
+	private String name;
+	/**
+	 * 商品描述
+	 */
+	private String described;
+	/**
+	 * 价格
+	 */
+	private int price;
+	/**
+	 * 库存
+	 */
+	private int stock;
+	/**
+	 * 图片地址
+	 */
+	private String pictureUrl;
+	/**
+	 * 已售商品数量
+	 */
+	private int sold;
 
 
 	public int getId() {

@@ -5,7 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @author goodwin 购物车商品展示模型
+ * 购物车商品展示模型
+ * @author goodwin
  */
 @Data
 @AllArgsConstructor
@@ -13,10 +14,22 @@ import lombok.NoArgsConstructor;
 public class CartVo {
 	private int goodsId;
 	private String goodsName;
+	/**
+	 * 图片地址
+	 */
 	private String pictureUrl;
-	private int price;// 单价
-	private int amount;// 商品数量
-	private int aubtotal;// 小计
+	/**
+	 * 价格
+	 */
+	private int price;
+	/**
+	 * 商品数量
+	 */
+	private int amount;
+	/**
+	 * 小计
+	 */
+	private int aubtotal;
 
 
 

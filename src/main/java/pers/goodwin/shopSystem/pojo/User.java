@@ -4,15 +4,33 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author goodwin
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
+	/**
+	 * 用户id
+	 */
 	private int id;
+	/**
+	 * 用户名
+	 */
 	private String username;
+	/**
+	 * 密码
+	 */
 	private String password;
+	/**
+	 * 出生日期
+	 */
 	private String birthdate;
-	private int gender;// 0男，1女
+	/**
+	 * 性别，用0表示男，1表示女，默认为0
+	 */
+	private int gender;
 
 	public int getId() {
 		return id;

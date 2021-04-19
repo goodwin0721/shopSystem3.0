@@ -5,17 +5,42 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 订单的展示模型，存放在网页展示的订单信息
+ * @author goodwin
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class IndentVo {
+	/**
+	 * 商品id
+	 */
 	private int goodsId;
+	/**
+	 * 商品名称
+	 */
 	private String goodsName;
+	/**
+	 * 商品图片地址
+	 */
 	private String pictureUrl;
-	private int price;// 单价
-	private int amount;// 商品数量
-	private int aubtotal;// 小计
-	private String tradeTime;// 交易时间
+	/**
+	 * 商品价格
+	 */
+	private int price;
+	/**
+	 * 商品数量
+	 */
+	private int amount;
+	/**
+	 * 小计，其值为price*amount
+	 */
+	private int aubtotal;
+	/**
+	 * 商品的交易时间
+	 */
+	private String tradeTime;
 
 
 

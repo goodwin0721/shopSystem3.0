@@ -4,13 +4,26 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 商品分类模型
+ * @author goodwin
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class GoodsClassify {
+	/**
+	 * 分类的id
+	 */
 	private int id;
-	private String classify;//分类
-	private int sum;//该分类的商品总数
+	/**
+	 * 分类名称
+	 */
+	private String classify;
+	/**
+	 * 该分类下的商品总数
+	 */
+	private int sum;
 
 	public int getId() {
 		return id;

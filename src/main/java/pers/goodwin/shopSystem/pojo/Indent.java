@@ -4,15 +4,37 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 订单模型
+ * @author goodwin
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Indent {
+	/**
+	 * 订单id
+	 */
 	private int id;
+	/**
+	 * 该订单所属用户的id
+	 */
 	private int userId;
+	/**
+	 * 订单的商品id
+	 */
 	private int goodsId;
+	/**
+	 * 订单生成时的商品价格
+	 */
 	private int price;
+	/**
+	 * 商品的数量
+	 */
 	private int amount;
+	/**
+	 * 订单生成时的时间
+	 */
 	private String tradeTime;
 
 	public int getId() {
