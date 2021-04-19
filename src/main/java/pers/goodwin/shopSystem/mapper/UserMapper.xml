@@ -4,12 +4,6 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
  <mapper namespace="pers.goodwin.shopSystem.mapper.UserMapper">
- 	<!-- 
-	public User getUserByPassword(User user);//获得用户实例
-	public void addUser(User user);//增加用户
-	public void addManager(Integer userId);//增加管理员
-	public Integer isManager(User user);//判断用户是否是管理员       -->
-
 	<select id="getUserByUsername" parameterType="String" resultType="user">
 		select *from db_shopsystem3.t_user where username = #{username}
 	</select>
